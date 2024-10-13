@@ -25,6 +25,7 @@ Create a start batch file with a call such as
 - *Starting Key*: 0-->A, 1-->Bb, etc.
 - *Pointy-up hexagons*
 - *ShiftY*: something like 0.6494251777385843
+- *keytop height diff*: 0.25 or higher
 
 ### Other recommendation
 
