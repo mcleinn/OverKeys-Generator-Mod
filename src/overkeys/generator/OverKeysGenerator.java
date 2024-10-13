@@ -613,7 +613,7 @@ public class OverKeysGenerator {
                 pw.println("linear_extrude(height=(keytopHeight+keytopHeightDifference-(" + ((double) (currentGeneratorIn + 1.0) / (double) desiredGamut) * keytopHeightDifference + ")+0.25*(metalRoundRadius+sqrt(metalRoundRadius*metalRoundRadius*2)+4))){");
             }
 
-            //pw.println("scale([stalkScaleX,stalkScaleY])");
+            pw.println("scale([keyScale,keyScale,1])");
             pw.println("polygon(points=[");
             pw.println("[0,0],[underKeyWidth/3,0],[underKeyWidth/3,(a+d)/2],[0,(a+d)/2]");
             pw.println("]);");
@@ -656,7 +656,7 @@ public class OverKeysGenerator {
             //pwKeyTop.println("scale([holeScaleX,holeScaleY,0.5])");
             pwKeyTop.println("linear_extrude(height = 0.5*keytopHeight)");
             pwKeyTop.println("polygon(points=[");
-            pwKeyTop.println("[0,0],[underKeyWidth/3-"+xToleranceGap+",0],[underKeyWidth/3-"+xToleranceGap+",(a+d)/2-"+yToleranceGap+"],[0,(a+d)/2-"+yToleranceGap+"]");
+            pwKeyTop.println("[0,0],[underKeyWidth/3+"+xToleranceGap+",0],[underKeyWidth/3+"+xToleranceGap+",(a+d)/2+"+yToleranceGap+"],[0,(a+d)/2+"+yToleranceGap+"]");
             pwKeyTop.println("]);");
             //pwKeyTop.println("keytopShape();");
             
