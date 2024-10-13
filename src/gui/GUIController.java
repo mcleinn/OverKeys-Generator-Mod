@@ -78,6 +78,15 @@ public class GUIController implements Initializable {
 
     @FXML
     private TextField metalRoundRadius;
+    
+    
+    @FXML
+    private TextField extraLever;
+
+    
+    @FXML
+    private TextField prowFactor;
+
 
     @FXML
     private TextField octaveWidth;
@@ -243,6 +252,9 @@ public class GUIController implements Initializable {
 
             doubleValues.put("shiftXValue",Double.parseDouble(shiftXValue.getText()));
             doubleValues.put("shiftYValue",Double.parseDouble(shiftYValue.getText()));
+            
+            doubleValues.put("extraLever",Double.parseDouble(extraLever.getText()));
+            doubleValues.put("prowFactor",Double.parseDouble(prowFactor.getText()));
 
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);

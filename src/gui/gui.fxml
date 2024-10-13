@@ -46,6 +46,10 @@
                       <Label layoutX="32.0" layoutY="178.0" text="Keytop Height Diff :" />
                       <TextField fx:id="metalRoundRadius" layoutX="178.0" layoutY="214.0" />
                       <Label layoutX="32.0" layoutY="218.0" text="Metal Round Radius :" />
+                      <TextField fx:id="extraLever" layoutX="178.0" layoutY="258.0" />
+                      <Label layoutX="32.0" layoutY="258.0" text="Extra Lever Length :" />
+                      <TextField fx:id="prowFactor" layoutX="178.0" layoutY="298.0" />
+                      <Label layoutX="32.0" layoutY="298.0" text="Prow height factor :" />
                   <Label layoutX="32.0" layoutY="149.0" text="Pre Shortening" />
                   </children>
                   <GridPane.margin>

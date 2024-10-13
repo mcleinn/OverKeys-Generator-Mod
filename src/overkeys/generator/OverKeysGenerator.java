@@ -15,7 +15,7 @@ public class OverKeysGenerator {
     double metalRoundRadius, octaveWidth, periodWidth, underKeyWidth, blackKeyHeight, blackKeyLength, whiteKeyHeight, whiteKeyLength, whiteKeyLengthPreShortening, edgeRadius = 3, keytopHeight = 10, tolerance = 0.05,//measurements
             genh, genhPreShortening, overhead, keyTopSide1, keyTopSide2, shiftX, shiftY, slantCutWidth,//derived stuff
             theta, q, r, a, aPreShortening, b, c, d, dPreShortening, z,//bunch of triangle stuff
-            generator, keyScale, holeScaleX, holeScaleY, stalkScaleX, stalkScaleY, keytopHeightDifference,xToleranceGap,yToleranceGap;
+            generator, keyScale, holeScaleX, holeScaleY, stalkScaleX, stalkScaleY, keytopHeightDifference,xToleranceGap,yToleranceGap,extraLever,prowFactor;
     double metalRoundRadiusTolerance = 0.0125, underKeyGap;
     int periodSteps, generatorSteps, desiredGamut, startingKey, range, genForLargeStep, genForSmallStep, stepsForLarge, stepsForSmall, genForStep1, genForStep1b;
     boolean isKeytop, verticalFlip, neededAbsoluteValue = false, manualKeyFlip, shiftXTrue, roughRender, keytopsInTogether, keytopsInSingleKeyFiles;
@@ -63,6 +63,8 @@ public class OverKeysGenerator {
             underKeyGap=values.get("underkeyGap");
             xSliderValue=values.get("shiftXValue");
             ySliderValue=values.get("shiftYValue");
+            extraLever=values.get("extraLever");
+            prowFactor=values.get("prowFactor");
 
             periodSteps= (int) Math.round(values.get("halfStepsToPeriod"));
             generatorSteps=(int) Math.round(values.get("halfStepsToGenerator"));
@@ -98,6 +100,8 @@ public class OverKeysGenerator {
             underKeyGap=doubleValues.get("underkeyGap");
             xSliderValue=doubleValues.get("shiftXValue");
             ySliderValue=doubleValues.get("shiftYValue");
+            extraLever=doubleValues.get("extraLever");
+            prowFactor=doubleValues.get("prowFactor");
 
 
             periodSteps= Math.round(intValues.get("halfStepsToPeriod"));
@@ -129,6 +133,8 @@ public class OverKeysGenerator {
 
         keytopHeightDifference = 15;
         metalRoundRadius = 2.5;
+        prowFactor = 0.5;
+        extraLever = 0.0;
 
         periodSteps = 12;
         generatorSteps = 5;
@@ -335,6 +341,8 @@ public class OverKeysGenerator {
         pwValues.println("keyScale=" + keyScale + ";");
         pwValues.println("metalRoundRadius=" + metalRoundRadius + ";");
         pwValues.println("metalRoundRadiusTolerance=" + metalRoundRadiusTolerance + ";");
+        pwValues.println("extraLever=" + extraLever + ";");
+        pwValues.println("prowFactor=" + prowFactor + ";");
         pwValues.println("keytopHeight=" + keytopHeight + ";");
         pwValues.println("tolerance=" + tolerance + ";");
         pwValues.println("slantCutWidth=" + slantCutWidth + ";");
@@ -414,11 +422,13 @@ public class OverKeysGenerator {
 
         pw.println("difference(){");
         pw.println("union(){");
+        
+        pw.println("translate([0,-extraLever,0])"); 
 
         if (isWhiteKey(currentPianoKey)) {//first little chunk to hold the metal round, independent of the rest of the main base
-            pw.println("cube([underKeyWidth,metalRoundRadius*2+4,whiteKeyHeight],false);");
+            pw.println("cube([underKeyWidth,metalRoundRadius*2+4+extraLever,whiteKeyHeight],false);");
         } else {
-            pw.println("cube([underKeyWidth,metalRoundRadius*2+4,metalRoundRadius+sqrt(metalRoundRadius*metalRoundRadius*2)+4],false);");
+            pw.println("cube([underKeyWidth,metalRoundRadius*2+4+extraLever,metalRoundRadius+sqrt(metalRoundRadius*metalRoundRadius*2)+4],false);");
         }
 
         pw.println("translate([0,metalRoundRadius*2+4,0])");
@@ -439,6 +449,7 @@ public class OverKeysGenerator {
         pw.println("}");
 
         if (isWhiteKey(currentPianoKey)) {//round backs of white keys, vertically
+            pw.println("translate([0,-extraLever,0])"); 
             pw.println("difference(){"
                     + "translate([0,blackKeyHeight,0])\n"
                     + "rotate([45,0,0])\n"
@@ -450,6 +461,7 @@ public class OverKeysGenerator {
                     + "}\n");
         }
 
+        pw.println("translate([0,-extraLever,0])"); 
         pw.println("difference(){\n"
                 + "translate([-tolerance,-tolerance,-tolerance])\n");
         if (!isWhiteKey(currentPianoKey)) {
@@ -472,7 +484,7 @@ public class OverKeysGenerator {
         }
 
         pw.println("}\n");
-
+        pw.println("translate([0,-extraLever,0])"); 
         if (isWhiteKey(currentPianoKey)) {
             pw.println("translate([-.1,metalRoundRadius+2,blackKeyHeight+metalRoundRadius+2])");
         } else {
@@ -486,6 +498,7 @@ public class OverKeysGenerator {
         //cylinder transform and rotate for metal round, 0.1 to make the extra 0.2 stick out and not be flush with base
         pw.println("cylinder((underKeyWidth+.2),r=metalRoundRadius+metalRoundRadiusTolerance, true);}");//cylinder for metal round, CHANGED FROM +0.5 TO +0.25
 
+        pw.println("translate([0,-extraLever,0])");
         if (isWhiteKey(currentPianoKey)) {
             pw.println("translate([underKeyWidth/10,-tolerance,0.125*blackKeyHeight+blackKeyHeight])");
         } else {
@@ -505,7 +518,7 @@ public class OverKeysGenerator {
                     + "\npolygon(points=["
                     + "\n[whiteKeyLengthPreShortening,0],"
                     + "\n[length+underKeyWidth*1/6,0],"
-                    + "\n[length+underKeyWidth*1/6, whiteKeyHeight*0.5]"
+                    + "\n[length+underKeyWidth*1/6, whiteKeyHeight*prowFactor]"
                     + "\n]);"
                     + "\n}");
         } else {
@@ -513,9 +526,9 @@ public class OverKeysGenerator {
                     + "rotate([90,0,90])"
                     + "linear_extrude(height=underKeyWidth+1){"
                     + "\npolygon(points=["
-                    + "\n[blackKeyLength,0],"
+                    + "\n[blackKeyLength-extraLever,0],"
                     + "\n[length+underKeyWidth*1/6,0],"
-                    + "\n[length+underKeyWidth*1/6, blackKeyHeight*0.5]"
+                    + "\n[length+underKeyWidth*1/6, blackKeyHeight*prowFactor]"
                     + "\n]);"
                     + "\n}");
         }
