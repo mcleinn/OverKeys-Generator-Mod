@@ -29,7 +29,7 @@ Create a start batch file with a call such as
 
 ### Other recommendation
 
-- for me, an *Stalk fit X tolerance* of 0.1 produced tightly fitting keytops (default: 0.3)
+- for me, a *Stalk fit X tolerance* of 0.1 produced tightly fitting keytops (default: 0.3)
 
 ### Tipps for OpenSCAD beginners
 
