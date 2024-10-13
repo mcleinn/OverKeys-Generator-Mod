@@ -6,11 +6,11 @@
 
 ### Launching
 
-Create a start.bat with a call such as
+Create a start batch file with a call such as
 
     java --module-path <Path to OpenJFX>\openjfx-17.0.12_windows-x64_bin-sdk\lib  --add-modules javafx.controls,javafx.fxml -jar <Path to Repo>\OverKeys-Generator-Mod\dist\OverKeys.jar
 
-### New settings in modified version
+### New parameters in modified version
 
 - *extra lever length* (in mm, default: 0.0) - extends distance between rod and last key row *(useful for mechanical pianos)*
 - *prow height factor* (0.0 to 1.0, default: 0.5) - the bigger, the shorter the height of the pointy end of "long" black keys *(useful to avoid overlay keys hitting white keys on uneven keybeds)*
