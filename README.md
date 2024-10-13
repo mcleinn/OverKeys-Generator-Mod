@@ -12,7 +12,7 @@ Create a start batch file with a call such as
 
 ### New parameters in modified version
 
-- *extra lever length* (in mm, default: 0.0) - extends distance between rod and last key row *(useful for mechanical pianos)*
+- *extra lever length* (in mm, default: 0.0) - extends distance between rod and last key row *(useful for mechanical pianos, example values: 10.0, 20.00)* 
 - *prow height factor* (0.0 to 1.0, default: 0.5) - the bigger, the shorter the height of the pointy end of "long" black keys *(useful to avoid overlay keys hitting white keys on uneven keybeds)*
 
 ### Janko keyboard settings
