@@ -150,6 +150,12 @@ public class GUIController implements Initializable {
                     break;
                 case "shiftY":
                     break;
+                case "keepScad":
+                    if (Integer.parseInt(values.get(key)) == 1)
+                        keepScad.setSelected(true);
+                    else
+                        keepScad.setSelected(false);
+                    break;
                 default:
                     TextField field = (TextField) mainPane.getScene().lookup("#" + key);
                     field.setText(values.get(key));
@@ -167,6 +173,7 @@ public class GUIController implements Initializable {
     void savePreset(ActionEvent event) {
         Map<String, Double> doubleValues = getDoubleValues();
         Map<String, Integer> intValues = getIntValues();
+        Map<String, String> stringValues = getStringValues();
 
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
@@ -178,7 +185,7 @@ public class GUIController implements Initializable {
         File file = fileChooser.showSaveDialog(currentStage);
 
         if (file != null) {
-            saveToFile(doubleValues, intValues, file);
+            saveToFile(doubleValues, intValues, stringValues, file);
         }
 
     }
@@ -207,6 +214,11 @@ public class GUIController implements Initializable {
                 intValues.put("verticalFlip", 1);
             } else {
                 intValues.put("verticalFlip", 0);
+            }
+            if (keepScad.isSelected()) {
+                intValues.put("keepScad", 1);
+            } else {
+                intValues.put("keepScad", 0);
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
@@ -237,8 +249,20 @@ public class GUIController implements Initializable {
         }
         return doubleValues;
     }
+    
+    private Map<String, String> getStringValues() {
+        Map<String, String> stringValues = new HashMap<>();
+        try {
+            stringValues.put("renderFolder", renderFolder.getText());
+            stringValues.put("openscadPath", openscadPath.getText());
 
-    private void saveToFile(Map<String, Double> doubleValues, Map<String, Integer> intValues, File file) {
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return stringValues;
+    }
+
+    private void saveToFile(Map<String, Double> doubleValues, Map<String, Integer> intValues, Map<String, String> stringValues, File file) {
         try {
             PrintWriter writer;
             writer = new PrintWriter(file);
@@ -246,6 +270,8 @@ public class GUIController implements Initializable {
                 writer.println(key + SEPARATOR + doubleValues.get(key));
             for (String key : intValues.keySet())
                 writer.println(key + SEPARATOR + intValues.get(key));
+            for (String key : stringValues.keySet())
+                writer.println(key + SEPARATOR + stringValues.get(key));
             writer.close();
             Files.copy(file.toPath(), (new File("./resources/config.txt").toPath()), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException ex) {
