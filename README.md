@@ -30,3 +30,9 @@ Create a start batch file with a call such as
 ### Other recommendation
 
 - for me, an *Stalk fit X tolerance* of 0.1 produced tightly fitting keytops (default: 0.3)
+
+### Tipps for OpenSCAD beginners
+
+- always render with F6 first before scrolling around large models (much faster!)
+- use the latest *nightly* version, which supports measuring distances
+- in *preferences*, feature *fast-csg* should be activated for this to work
